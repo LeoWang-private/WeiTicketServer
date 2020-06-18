@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+    <!--加载配置jdbc配置文件-->
+    <context:property-placeholder location="classpath:database.properties"/>
+
+    <!--数据源--><!--使用了数据库连接池就可以不使用数据源的bean了-->
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName"><value>${driver}</value></property>
+        <property name="url"><value>${url}</value></property>
+        <property name="username"><value>${user}</value></property>
+        <property name="password"><value>${password}</value></property>
+    </bean>-->
+
+    <!--数据库连接池-->
+    <bean id="dataSource1" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="autoCommit" value="false"></property>
+        <property name="jdbcUrl" value="${url}"></property>
+        <property name="password" value="${password}"></property>
+        <property name="username" value="${user}"></property>
+        <property name="driverClassName" value="${driver}"></property>
+        <property name="maximumPoolSize" value="5"></property>
+    </bean>
+
+    <!--事务处理 开启Spring切面-->
+    <aop:aspectj-autoproxy  proxy-target-class="true"/>
+    <!--<aop:aspectj-autoproxy/>-->
+    <context:component-scan base-package="com.leo.service"/>
+
+    <!--配置sqlSessionFactory bean-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource1"/>
+        <!--mybatis配置文件路径-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!--配置sqlSession bean路径-->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!--动态代理实现 不用写dao层的实现-->
+    <bean id="MapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--这里的basePackage 指定了dao层接口路径，这里的dao接口不用自己实现-->
+        <property name="basePackage" value="com.leo.dao"/>
+
+
+        <!--如果只有一个数据源的话不用指定，但如果有多个数据源的话必须指定-->
+        <!--直接使用sqlSessionTemplate的方式-->
+        <property name="sqlSessionTemplateBeanName" value="sqlSession"/>
+    </bean>
+
+    <!--事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource1"/>
+    </bean>
+
+    <!--使用全注解事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+
+</beans>

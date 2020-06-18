@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leo.dao.CinemaDao">
+
+    <resultMap id="cinemaMap" type="com.leo.entity.Cinema">
+        <id property="cinemaId" column="cinema_id"/>
+        <result property="cinemaName" column="cinema_name"/>
+        <result property="pic" column="pic"/>
+        <result property="address" column="address"/>
+        <result property="sellPrice" column="sell_price"/>
+        <result property="distance" column="distance"/>
+        <result property="cityId" column="city_id"/>
+        <result property="contact" column="contact"/>
+        <result property="phone" column="phone"/>
+        <collection property="tags" ofType="com.leo.entity.CinemaTag" resultMap="cinemaTagMap"/>
+    </resultMap>
+
+    <resultMap id="cinemaTagMap" type="com.leo.entity.CinemaTag">
+        <!--<id property="tagId" column="tag_id"/>-->
+        <result property="allowRefund" column="allow_refund"/>
+        <result property="discount" column="discount"/>
+        <result property="snack" column="snack"/>
+        <result property="endorse" column="endorse"/>
+    </resultMap>
+
+    <!--根据城市Id查询电影院-->
+    <select id="getCinemaList" parameterType="java.lang.Integer"
+            resultMap="cinemaMap">
+        SELECT tc.*,tt.*
+        FROM cinema AS tc
+        LEFT JOIN cinema_tag AS tt
+        ON tc.tag_id = tt.tag_id
+        WHERE city_id = #{cityId}
+    </select>
+</mapper>

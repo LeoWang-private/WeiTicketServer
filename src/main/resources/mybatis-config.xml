@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <!-- 配置log4j输出日志信息 -->
+        <setting name="logImpl" value="LOG4J" />
+        <!--开启驼峰命名转换-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+    </settings>
+
+    <!--pagehelper插件配置-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="helperDialect" value="mysql"/>
+            <!--分页合理化参数-->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+
+
+    <!-- 将mapper文件加入到配置文件中 -->
+    <mappers>
+        <mapper resource="daoMapper/cityDaoMapper.xml"/>
+        <mapper resource="daoMapper/movieDaoMapper.xml"/>
+        <mapper resource="daoMapper/cinemaDaoMapper.xml"/>
+    </mappers>
+
+</configuration>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leo.dao.MovieDao">
+    <!--根据城市Id获取正在热映影片-->
+    <select id="getNowPlaying" parameterType="java.lang.Integer" resultType="com.leo.entity.Movie">
+        SELECT tm.*
+        FROM cinema AS tc LEFT JOIN movie_hall AS th
+        ON tc.cinema_id = th.cinema_id
+        LEFT JOIN plan AS tp
+        ON th.hall_id = tp.hall_id
+        LEFT JOIN movie AS tm
+        ON tp.movie_id = tm.movie_id
+        WHERE tc.city_id = #{cityId} AND tm.status = 1
+    </select>
+
+    <!--获取即将上映影片-->
+    <select id="getComingSoon" resultType="com.leo.entity.Movie">
+        select * from movie where status = 0
+    </select>
+
+
+</mapper>
