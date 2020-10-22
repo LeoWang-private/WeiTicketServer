@@ -14,6 +14,7 @@ public class Movie implements Serializable {
     private Integer movieId;
     private String movieName;
     private String englishName;
+    private String movieTimes;
     private String director;
     private String scriptWriter;
     private String mainActor;
@@ -82,7 +83,7 @@ public class Movie implements Serializable {
     }
 
     public void setReleaseDate(Date releaseDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         this.releaseDate = sdf.format(releaseDate);
     }
@@ -165,6 +166,14 @@ public class Movie implements Serializable {
 
     public void setShowInfo(String showInfo) {
         this.showInfo = showInfo;
+    }
+
+    public String getMovieTimes() {
+        return movieTimes;
+    }
+
+    public void setMovieTimes(String movieTimes) {
+        this.movieTimes = movieTimes;
     }
 
     @Override
