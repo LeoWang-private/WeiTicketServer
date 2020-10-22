@@ -32,4 +32,51 @@
         ON tc.tag_id = tt.tag_id
         WHERE city_id = #{cityId}
     </select>
+
+    <!--根据影院Id查询影院详情-->
+    <select id="getCinemaDetail" parameterType="java.lang.Integer"
+            resultType="com.leo.entity.Cinema">
+        select * from cinema where cinema_id = #{cinemaId}
+    </select>
+
+    <!--根据影院Id查询该影院正在放映和即将上映的影片信息-->
+    <select id="getMoviesByCinemaId" parameterType="java.lang.Integer"
+            resultType="com.leo.entity.dto.MovieDto">
+        SELECT DISTINCT(tm.movie_id),tm.movie_name,tm.img,score,tm.movie_times,tm.type
+        FROM movie AS tm
+        LEFT JOIN plan AS tp
+        ON tm.movie_id = tp.movie_id
+        WHERE tp.cinema_id = #{cinemaId}
+    </select>
+
+    <!--根据影院Id查询该影院的排片计划-->
+    <select id="getPlansByCinemaId" parameterType="java.lang.Integer"
+            resultType="com.leo.entity.dto.PlanDto">
+        SELECT tp.plan_id,tp.movie_id,tp.cinema_id,tp.hall_id,tp.play_date,tp.seat_price,th.hall_name,tm.language,tm.version,tt.*
+        FROM plan AS tp
+        LEFT JOIN movie_hall AS th
+        ON tp.hall_id = th.hall_id
+        LEFT JOIN movie AS tm
+        ON tp.movie_id = tm.movie_id
+        LEFT JOIN play_time AS tt
+        ON tp.play_time_id = tt.play_time_id
+        WHERE tp.cinema_id = #{cinemaId}
+    </select>
+
+    <!--根据影厅Id查询该影厅的座位信息-->
+    <select id="getSeatInfo" parameterType="java.lang.Integer"
+            resultType="com.leo.entity.dto.MovieHallDto">
+        SELECT hall_id,seat_num,row,col
+        FROM movie_hall
+        WHERE hall_id = #{hallId}
+    </select>
+
+    <!--根据planId查询影厅已选座位-->
+    <select id="getSelectedSeat" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT seat_info
+        FROM plan
+        WHERE plan_id = #{planId}
+    </select>
+
 </mapper>

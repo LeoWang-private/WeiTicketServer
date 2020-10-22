@@ -1,7 +1,9 @@
 package com.leo.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Plan implements Serializable {
     private static final long serialVersionUID = -88423838056348851L;
@@ -10,7 +12,7 @@ public class Plan implements Serializable {
     private Integer hallId;
     private Integer movieId;
     private Integer cinemaId;
-    private Date playDate;
+    private String playDate;
     private Float seatPrice;
     private PlayTime playTime;
 
@@ -46,12 +48,15 @@ public class Plan implements Serializable {
         this.cinemaId = cinemaId;
     }
 
-    public Date getPlayDate() {
+    public String getPlayDate() {
+
         return playDate;
     }
 
     public void setPlayDate(Date playDate) {
-        this.playDate = playDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        this.playDate = sdf.format(playDate);
     }
 
     public Float getSeatPrice() {

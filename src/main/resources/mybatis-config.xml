@@ -28,6 +28,8 @@
         <mapper resource="daoMapper/cityDaoMapper.xml"/>
         <mapper resource="daoMapper/movieDaoMapper.xml"/>
         <mapper resource="daoMapper/cinemaDaoMapper.xml"/>
+        <mapper resource="daoMapper/userDaoMapper.xml"/>
+        <mapper resource="daoMapper/orderDaoMapper.xml"/>
     </mappers>
 
 </configuration>
